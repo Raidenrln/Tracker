@@ -1,28 +1,41 @@
-
-import { dateFormat } from '../../utils/date';
-import Storecard from './Storecard';
+import { dateFormat } from "../../utils/date";
+import Storecard from "./Storecard";
+import { useStore } from "../../context/StoreContext";
 
 const StoreList = () => {
+  const { stores } = useStore();
 
-  return (<>
-      <div className="bg-[#F5F4F0] w-full h-screen">
-      <div className="p-4"> 
+  return (
+    <div className="bg-[#F5F4F0] w-full h-screen">
+      <div className="p-4">
         <div className="flex gap-1 items-center justify-between">
-          <div className="flex gap-1 ">
+          <div className="flex gap-1">
             <span className="text-[12px] text-[#DFA700]">●</span>
-            <span className="text-[12px] text-[#9999B0] font-medium">STORE</span>
+            <span className="text-[12px] text-[#9999B0] font-medium">
+              STORE
+            </span>
           </div>
-          <span className="text-[12px] text-[#9999B0]">{dateFormat()}</span>
+
+          <span className="text-[12px] text-[#9999B0]">
+            {dateFormat()}
+          </span>
         </div>
+
         <div className="mb-5">
           <h1 className="font-bold text-2xl">Store List:</h1>
-          <div>
-            <Storecard/>
+
+          <div className="mt-4 flex flex-col gap-4">
+            {stores.map((store, index) => (
+              <Storecard
+                key={index}
+                store={store}
+              />
+            ))}
           </div>
         </div>
-        </div>
-        </div>
-        </>  
-  )
-}
-export default StoreList
+      </div>
+    </div>
+  );
+};
+
+export default StoreList;
