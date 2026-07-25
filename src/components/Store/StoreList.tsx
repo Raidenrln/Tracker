@@ -2,7 +2,11 @@ import { dateFormat } from "../../utils/date";
 import Storecard from "./Storecard";
 import { useStore } from "../../context/StoreContext";
 
-const StoreList = () => {
+interface StoreListProps {
+  onViewDetail: (id: string) => void;
+}
+
+const StoreList = ({ onViewDetail }: StoreListProps) => {
   const { stores } = useStore();
 
   return (
@@ -24,11 +28,12 @@ const StoreList = () => {
         <div className="mb-5">
           <h1 className="font-bold text-2xl">Store List:</h1>
 
-          <div className="mt-4 flex flex-col gap-4">
+          <div className="grid gap-2 grid-cols-[repeat(auto-fill,minmax(250px,1fr))]">
             {stores.map((store, index) => (
               <Storecard
                 key={index}
                 store={store}
+                onViewDetail={onViewDetail}
               />
             ))}
           </div>

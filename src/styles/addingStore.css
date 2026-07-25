@@ -42,8 +42,7 @@
 }
 
 .form-header h1 {
-  font-family: 'Syne', sans-serif;
-  font-size: 28px;
+  font-size: 36px;
   font-weight: 800;
   color: var(--text-primary);
   letter-spacing: -0.5px;

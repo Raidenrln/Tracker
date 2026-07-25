@@ -4,11 +4,13 @@ import type { StoreModel } from "../../model/StoreModel";
 
 interface StorecardProps {
   store: StoreModel;
+  onViewDetail: (id: string) => void;
 }
 
-const Storecard = ({ store }: StorecardProps) => {
+const Storecard = ({ store, onViewDetail }: StorecardProps) => {
+
   return (
-    <div className="max-w-60 h-auto rounded-[10px] shadow-[0_0_10px_rgba(0,0,0,0.5)] overflow-hidden">
+    <div className="w-full rounded-[10px] shadow-[0_0_10px_rgba(0,0,0,0.5)] overflow-hidden">
       <div className="w-full h-full flex flex-col gap-2">
         <div
           className="flex rounded-[10px] gap-2 p-2"
@@ -42,12 +44,15 @@ const Storecard = ({ store }: StorecardProps) => {
           </div>
 
           <div className="flex flex-col">
-            <span>Total Products: 8</span>
-            <span>Total Boughts: ₱50</span>
+            <span>Total Products: {store.productQuantity || 0}</span>
+            <span>Total Boughts: ₱{store.totalBought || 0}</span>
           </div>
 
           <div className="flex gap-2">
-            <button className="flex-[1.5] rounded-[10px] py-1 bg-[#68858B]">
+            <button 
+            className="flex-[1.5] rounded-[10px] py-1 bg-[#68858B]"
+            onClick={() => onViewDetail(store.id) }
+            >
               View Details
             </button>
 

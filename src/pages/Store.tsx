@@ -2,12 +2,21 @@ import { useState } from "react";
 import AddStore from "../components/Store/AddStore";
 import StoreList from "../components/Store/StoreList";
 import AddingStore from "../components/modal/AddingStore";
+import StoreViewDetails from "../components/modal/StoreViewDetails";
 
 const Store = () => {
   const [isshow, setIsShow] = useState(false)
+  const [details, setDetails] = useState(false);
+  const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
+
+  const viewDetailButton = (id: string) => {
+    setSelectedStoreId(id);
+    setDetails(true);
+  };
+
   return (
     <div className="relative">
-      <StoreList />
+      <StoreList onViewDetail={viewDetailButton} />
       <div onClick={() => setIsShow(!isshow)} className="absolute bottom-6 right-6">
         <AddStore />
       </div>
@@ -19,6 +28,16 @@ const Store = () => {
           </div>
         </div>
       )}
+
+      {details && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm overflow-y-auto">
+        <StoreViewDetails
+          storeId={selectedStoreId}
+          onClose={() => setDetails(false)}
+        />
+        </div>
+      )}
+
     </div>
   );
 };

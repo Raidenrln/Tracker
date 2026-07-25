@@ -1,5 +1,6 @@
 import { type ProductModel } from "./ProductModel"
 export interface StoreModel {
+  id: string
   name: string
   dateCreated: string
   facebook?: string
@@ -10,6 +11,7 @@ export interface StoreModel {
   isFavorite?: boolean
   location?: string
   productQuantity?: number
-  Products?: ProductModel
+  totalBought?: number
+  products?: ProductModel[];
   color: string
 }

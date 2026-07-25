@@ -2,7 +2,7 @@ import { useState } from "react";
 import "/src/styles/addingStore.css";
 import type { StoreModel } from "../../model/StoreModel";
 import { useStore } from "../../context/StoreContext";
-
+import { v4 as uuidv4 } from 'uuid';
 interface AddingStoreProps {
   onClose: () => void;
 }
@@ -13,7 +13,8 @@ const AddingStore = ({ onClose }: AddingStoreProps) => {
     today.getMonth() + 1
   ).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
   const { addStore } = useStore();
-  
+  const storeID = uuidv4()
+
   const [storeName, setStoreName] = useState("");
   const [storeType, setStoreType] = useState("");
   const [storeDesc, setStoreDesc] = useState("");
@@ -21,11 +22,12 @@ const AddingStore = ({ onClose }: AddingStoreProps) => {
   const [storeOpenTime, setStoreOpenTime] = useState("");
   const [storeCloseTime, setStoreCloseTime] = useState("");
   const [storeLocation, setStoreLocation] = useState("");
-  const [storeColor, setStoreColor] = useState("")
+  const [storeColor, setStoreColor] = useState("#000000")
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
     const storeObject: StoreModel = {
+      id: storeID,
       name: storeName,
       type: storeType,
       description: storeDesc,
