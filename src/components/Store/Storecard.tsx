@@ -5,9 +5,10 @@ import type { StoreModel } from "../../model/StoreModel";
 interface StorecardProps {
   store: StoreModel;
   onViewDetail: (id: string) => void;
+  onViewProducts: (id: string) => void;
 }
 
-const Storecard = ({ store, onViewDetail }: StorecardProps) => {
+const Storecard = ({ store, onViewDetail, onViewProducts }: StorecardProps) => {
 
   return (
     <div className="w-full rounded-[10px] shadow-[0_0_10px_rgba(0,0,0,0.5)] overflow-hidden">
@@ -56,7 +57,9 @@ const Storecard = ({ store, onViewDetail }: StorecardProps) => {
               View Details
             </button>
 
-            <button className="flex-1 rounded-[10px] py-1 bg-[#C4CECF]">
+            <button 
+            className="flex-1 rounded-[10px] py-1 bg-[#C4CECF]"
+            onClick={() => onViewProducts(store.id)}>
               Products
             </button>
           </div>

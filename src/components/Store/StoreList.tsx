@@ -4,9 +4,10 @@ import { useStore } from "../../context/StoreContext";
 
 interface StoreListProps {
   onViewDetail: (id: string) => void;
+  onViewProducts: (id: string) => void;
 }
 
-const StoreList = ({ onViewDetail }: StoreListProps) => {
+const StoreList = ({ onViewDetail, onViewProducts }: StoreListProps) => {
   const { stores } = useStore();
 
   return (
@@ -34,6 +35,7 @@ const StoreList = ({ onViewDetail }: StoreListProps) => {
                 key={index}
                 store={store}
                 onViewDetail={onViewDetail}
+                onViewProducts={onViewProducts}
               />
             ))}
           </div>

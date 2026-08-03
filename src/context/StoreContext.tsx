@@ -1,9 +1,11 @@
 import { useContext, createContext, useState, type ReactNode } from "react";
 import type { StoreModel } from "../model/StoreModel";
+import type { ProductModel } from "../model/ProductModel";
 
 interface StoreContextModel {
   stores: StoreModel[];
-  addStore: (store: StoreModel) => void
+  addStore: (store: StoreModel) => void;
+  addProduct: (storeId: string, product: ProductModel) => void;
 }
 
 const StoreContext = createContext<StoreContextModel | null>(null);
@@ -14,9 +16,22 @@ export const StoreProvider = ({ children }: {children: ReactNode}) => {
   const addStore = (store: StoreModel) => {
     setStores((prev) => [...prev, store]) 
   }
+
+  const addProduct = (storeId: string, product: ProductModel) => {
+  setStores(prev =>
+    prev.map(store =>
+      store.id === storeId
+        ? {
+            ...store,
+            products: [...store.products, product],
+          }
+        : store
+    )
+  );
+};
   return(
   <>
-    <StoreContext.Provider value={{stores, addStore}}>
+    <StoreContext.Provider value={{stores, addStore, addProduct}}>
       {children}
     </StoreContext.Provider>
   </>) 

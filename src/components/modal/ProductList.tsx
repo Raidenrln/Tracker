@@ -10,15 +10,14 @@ import {
   Plus,
   Minus,
 } from "lucide-react";
+import type { ProductModel } from "../../model/ProductModel";
+import { useStore } from "../../context/StoreContext";
 
-interface Product {
-  id: string;
-  name: string;
-  category: string;
-  description: string;
-  price: number;
-  currency: string;
-}
+type ProductListProps = {
+  storeId: string | null;
+  addingProduct: (id: string) => void;
+  onClose: () => void;
+};
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
   PHP: "₱",
@@ -26,7 +25,8 @@ const CURRENCY_SYMBOLS: Record<string, string> = {
   EUR: "€",
 };
 
-const SAMPLE_PRODUCTS: Product[] = [
+
+const SAMPLE_PRODUCTS: ProductModel[] = [
   {
     id: "1",
     name: "Iced Coffee",
@@ -73,11 +73,15 @@ const CATEGORY_FILTERS = ["All", "Food", "Drinks", "Snacks", "Merchandise", "Oth
 
 type CartState = Record<string, number>;
 
-export default function ProductList() {
-  const [products] = useState<Product[]>(SAMPLE_PRODUCTS);
-  const [search, setSearch] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("All");
-  const [cart, setCart] = useState<CartState>({});
+export default function ProductList({ storeId, onClose, addingProduct }: ProductListProps) {
+  const { stores } = useStore();
+
+const store = stores.find((s) => s.id === storeId);
+const products = store?.products ?? [];
+
+const [search, setSearch] = useState("");
+const [categoryFilter, setCategoryFilter] = useState("All");
+const [cart, setCart] = useState<CartState>({});
 
   const filtered = products.filter((p) => {
     const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase());
@@ -110,7 +114,11 @@ export default function ProductList() {
   const cartCount = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
 
   return (
-    <div className="min-h-screen bg-[#f4f2ed] p-4 sm:p-6 flex justify-center">
+    
+    <div 
+    onDoubleClick={() => onClose()} 
+    className="h-auto overflow-hidden rounded bg-[#f4f2ed] p-4 sm:p-6 flex justify-center"
+    >
       <div className="w-full max-w-4xl">
         {/* Header */}
         <div className="flex items-start justify-between gap-4 mb-6">
@@ -139,6 +147,14 @@ export default function ProductList() {
             <button
               type="button"
               className="hidden sm:flex items-center gap-2 rounded-lg bg-emerald-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-800 transition-colors whitespace-nowrap"
+              onClick={() => {
+              console.log("Button clicked");
+              console.log("storeId:", storeId);
+
+              if (storeId) {
+                addingProduct(storeId);
+              }
+             }}
             >
               <PlusSquare size={16} />
               Add Product
@@ -150,6 +166,14 @@ export default function ProductList() {
         <button
           type="button"
           className="sm:hidden w-full mb-4 flex items-center justify-center gap-2 rounded-lg bg-emerald-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-800 transition-colors"
+          onClick={() => {
+              console.log("Button clicked");
+              console.log("storeId:", storeId);
+
+              if (storeId) {
+                addingProduct(storeId);
+              }
+             }}
         >
           <PlusSquare size={16} />
           Add Product
@@ -316,7 +340,7 @@ export default function ProductList() {
 
         {/* Mobile cards (below md) */}
         {filtered.length > 0 && (
-          <div className="md:hidden flex flex-col gap-3">
+          <div className="md:hidden flex flex-col gap-3 max-h-[60vh] overflow-y-auto" style={{scrollbarWidth: "none"}}>
             {filtered.map((product) => {
               const qty = cart[product.id] ?? 0;
               return (
@@ -403,6 +427,8 @@ export default function ProductList() {
           Showing {filtered.length} of {products.length} products.
         </p>
       </div>
+
+      
     </div>
   );
 }

@@ -12,6 +12,6 @@ export interface StoreModel {
   location?: string
   productQuantity?: number
   totalBought?: number
-  products?: ProductModel[];
+  products: ProductModel[];
   color: string
 }

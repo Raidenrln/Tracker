@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { ChevronDown, PlusSquare } from "lucide-react";
-
+import { useStore } from "../../context/StoreContext";
+import type { ProductModel } from "../../model/ProductModel";
+import { v4 as uuidv4 } from 'uuid';
 interface ProductFormData {
   name: string;
   category: string;
@@ -8,6 +10,11 @@ interface ProductFormData {
   price: string;
   currency: string;
 }
+
+type AddingProductProps = {
+  storeId: string | null;
+  onClose: () => void;
+};
 
 const CATEGORIES = [
   "Food",
@@ -22,15 +29,17 @@ const CURRENCIES = [
   { value: "USD", label: "USD ($)" },
 ];
 
-export default function AddProductForm() {
-  const [formData, setFormData] = useState<ProductFormData>({
+export default function AddingProduct({storeId, onClose}: AddingProductProps) {
+  const { stores, addProduct } = useStore();
+  const randomUUID = uuidv4();
+  const [formData, setFormData] = useState<ProductModel>({
+    id: "",
     name: "",
     category: "",
     description: "",
-    price: "",
+    price: 0,
     currency: "PHP",
   });
-
   const handleChange = (
     field: keyof ProductFormData,
     value: string
@@ -40,22 +49,34 @@ export default function AddProductForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Replace with actual submit logic
-    console.log("Submitting product:", formData);
+    if (!storeId) return;
+
+    const newProduct: ProductModel = {
+    id: uuidv4(),
+    name: formData.name,
+    category: formData.category,
+    description: formData.description,
+    price: Number(formData.price), // convert string → number
+    currency: formData.currency,
+    };
+
+    addProduct(storeId, newProduct);
+    console.log("Submitting product:", newProduct, stores);
   };
 
   const handleCancel = () => {
     setFormData({
+      id: "",
       name: "",
       category: "",
       description: "",
-      price: "",
+      price: 0,
       currency: "PHP",
     });
   };
 
   return (
-    <div className="min-h-screen bg-[#f4f2ed] p-6 flex justify-center">
+    <div onDoubleClick={() => onClose()} className="h-auto rounded-2xl bg-[#f4f2ed] p-6 flex justify-center">
       <div className="w-full max-w-2xl">
         <h1 className="text-3xl font-bold text-neutral-900">Add a Product</h1>
         <p className="text-neutral-500 mt-1 mb-6">

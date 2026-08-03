@@ -36,7 +36,8 @@ const AddingStore = ({ onClose }: AddingStoreProps) => {
       openTime: storeOpenTime,
       closeTime: storeCloseTime,
       location: storeLocation,
-      color: storeColor
+      color: storeColor,
+      products: []
     };
 
     addStore(storeObject);
