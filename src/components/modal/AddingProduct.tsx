@@ -3,6 +3,7 @@ import { ChevronDown, PlusSquare } from "lucide-react";
 import { useStore } from "../../context/StoreContext";
 import type { ProductModel } from "../../model/ProductModel";
 import { v4 as uuidv4 } from 'uuid';
+import { RiCloseFill } from "react-icons/ri";
 interface ProductFormData {
   name: string;
   category: string;
@@ -20,6 +21,7 @@ const CATEGORIES = [
   "Food",
   "Drinks",
   "Snacks",
+  "Hygiene",
   "Merchandise",
   "Other",
 ];
@@ -31,7 +33,6 @@ const CURRENCIES = [
 
 export default function AddingProduct({storeId, onClose}: AddingProductProps) {
   const { stores, addProduct } = useStore();
-  const randomUUID = uuidv4();
   const [formData, setFormData] = useState<ProductModel>({
     id: "",
     name: "",
@@ -51,17 +52,23 @@ export default function AddingProduct({storeId, onClose}: AddingProductProps) {
     e.preventDefault();
     if (!storeId) return;
 
+    if (formData.name.trim() === "" || formData.category.trim() === "") {
+      return;
+    }
+
     const newProduct: ProductModel = {
-    id: uuidv4(),
-    name: formData.name,
-    category: formData.category,
-    description: formData.description,
-    price: Number(formData.price), // convert string → number
-    currency: formData.currency,
+      id: uuidv4(),
+      name: formData.name,
+      category: formData.category,
+      description: formData.description,
+      price: Number(formData.price),
+      currency: formData.currency,
     };
 
+    console.log("Submitting product:", newProduct);
+    
     addProduct(storeId, newProduct);
-    console.log("Submitting product:", newProduct, stores);
+    onClose()
   };
 
   const handleCancel = () => {
@@ -73,16 +80,16 @@ export default function AddingProduct({storeId, onClose}: AddingProductProps) {
       price: 0,
       currency: "PHP",
     });
+    onClose();
   };
 
   return (
-    <div onDoubleClick={() => onClose()} className="h-auto rounded-2xl bg-[#f4f2ed] p-6 flex justify-center">
+    <div className="relative h-auto rounded-2xl bg-[#f4f2ed] p-6 flex justify-center">
       <div className="w-full max-w-2xl">
-        <h1 className="text-3xl font-bold text-neutral-900">Add a Product</h1>
-        <p className="text-neutral-500 mt-1 mb-6">
-          Fill in the details below to add a new product to your store.
-        </p>
-
+          <h1 className="text-3xl font-bold text-neutral-900">Add a Product</h1>
+          <p className="text-neutral-500 mt-1 mb-6">
+            Fill in the details below to add a new product to your store.
+          </p>
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Basic Info */}
           <section className="bg-white rounded-xl border-l-4 border-l-emerald-700 border border-neutral-200 p-6">
@@ -203,6 +210,11 @@ export default function AddingProduct({storeId, onClose}: AddingProductProps) {
             </button>
           </div>
         </form>
+                <div className="absolute top-5 right-5">
+          <button className="relative flex items-center justify-center h-10 w-10 rounded-lg border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 transition-colors">
+            <RiCloseFill color="red" size={20} onClick={() => onClose()}/>
+          </button>
+        </div>
       </div>
     </div>
   );

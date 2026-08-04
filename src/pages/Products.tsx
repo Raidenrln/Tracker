@@ -1,9 +1,8 @@
 const Product = () => {
   return (
-    <div>
-
-    </div>
+    <>
+    <h1>SDADSD</h1>
+    </>
   )
 }
-
 export default Product

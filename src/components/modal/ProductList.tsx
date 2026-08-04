@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import type { ProductModel } from "../../model/ProductModel";
 import { useStore } from "../../context/StoreContext";
+import { RiCloseFill } from "react-icons/ri";
 
 type ProductListProps = {
   storeId: string | null;
@@ -115,11 +116,8 @@ const [cart, setCart] = useState<CartState>({});
 
   return (
     
-    <div 
-    onDoubleClick={() => onClose()} 
-    className="h-auto overflow-hidden rounded bg-[#f4f2ed] p-4 sm:p-6 flex justify-center"
-    >
-      <div className="w-full max-w-4xl">
+    <div className="max-h-[90vh] flex flex-col rounded bg-[#f4f2ed] p-4 sm:p-6 overflow-hidden">
+      <div className="w-full max-w-4xl flex flex-col flex-1 h-auto min-h-0">
         {/* Header */}
         <div className="flex items-start justify-between gap-4 mb-6">
           <div>
@@ -158,6 +156,9 @@ const [cart, setCart] = useState<CartState>({});
             >
               <PlusSquare size={16} />
               Add Product
+            </button>
+            <button className="relative flex items-center justify-center h-10 w-10 rounded-lg border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 transition-colors">
+              <RiCloseFill color="red" size={20} onClick={() => onClose()}/>
             </button>
           </div>
         </div>
@@ -229,7 +230,9 @@ const [cart, setCart] = useState<CartState>({});
 
         {/* Desktop table (md and up) */}
         {filtered.length > 0 && (
-          <div className="hidden md:block bg-white rounded-xl border border-neutral-200 overflow-hidden">
+          <div className="hidden md:block flex-1 min-h-0 overflow-y-auto rounded-xl border border-neutral-200 bg-white"
+          style={{scrollbarWidth: "none"}}
+          >
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-neutral-200 bg-neutral-50/60">
@@ -250,7 +253,7 @@ const [cart, setCart] = useState<CartState>({});
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="max-h-full overflow-y-auto">
                 {filtered.map((product) => {
                   const qty = cart[product.id] ?? 0;
                   return (
@@ -340,7 +343,7 @@ const [cart, setCart] = useState<CartState>({});
 
         {/* Mobile cards (below md) */}
         {filtered.length > 0 && (
-          <div className="md:hidden flex flex-col gap-3 max-h-[60vh] overflow-y-auto" style={{scrollbarWidth: "none"}}>
+          <div className="md:hidden flex flex-col gap-3 min-h-0 overflow-y-auto" style={{scrollbarWidth: "none"}}>
             {filtered.map((product) => {
               const qty = cart[product.id] ?? 0;
               return (

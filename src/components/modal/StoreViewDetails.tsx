@@ -2,6 +2,7 @@ import { Calendar, Clock, MapPin, Package, ShoppingCart, Store } from "lucide-re
 import { CiFacebook } from "react-icons/ci";
 import { useStore } from "../../context/StoreContext";
 import "../../styles/storeView.css";
+import { RiCloseFill } from "react-icons/ri";
 
 interface StoreDetails {
   storeId: string | null;
@@ -13,7 +14,7 @@ const StoreViewDetails = ({ onClose, storeId }: StoreDetails) => {
   const s = stores.find((store) => store.id === storeId);
 
   return (
-    <div onDoubleClick={() => onClose()} className="svd-page">
+    <div className="svd-page">
       <div className="svd-container">
           <div key={s?.id} className="svd-card">
 
@@ -23,9 +24,14 @@ const StoreViewDetails = ({ onClose, storeId }: StoreDetails) => {
                 <div className="svd-header-name">{s?.name}</div>
                 <div className="svd-header-type">{s?.type}</div>
               </div>
-              <div className="svd-header-meta">
-                <div className="svd-header-meta-label">Store Created</div>
-                <div className="svd-header-meta-value">{s?.dateCreated}</div>
+              <div className="svd-header-meta gap-2">
+                <div>
+                  <div className="svd-header-meta-label">Store Created</div>
+                  <div className="svd-header-meta-value">{s?.dateCreated}</div>
+                </div>
+                <button className="relative flex items-center justify-center h-10 w-10 rounded-4xl borde bg-[#346953] text-neutral-600 hover:bg-[#56a081] transition-colors">
+                  <RiCloseFill color="white" size={24} onClick={() => onClose()}/>
+                </button>
               </div>
             </div>
 
@@ -113,7 +119,7 @@ const StoreViewDetails = ({ onClose, storeId }: StoreDetails) => {
                         <Package size={16} style={{ color: "#16a34a" }} />
                         Products
                       </div>
-                      <div className="svd-stat-value"><span>{s?.productQuantity ?? 0}</span></div>
+                      <div className="svd-stat-value"><span>{s?.products.length ?? 0}</span></div>
                     </div>
 
                     <div className="svd-stat-row">
@@ -137,7 +143,6 @@ const StoreViewDetails = ({ onClose, storeId }: StoreDetails) => {
                 </div>
               </div>
             </div>
-
           </div>
       </div>
     </div>

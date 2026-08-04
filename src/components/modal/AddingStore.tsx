@@ -35,6 +35,8 @@ const AddingStore = ({ onClose }: AddingStoreProps) => {
       facebook: storeFb,
       openTime: storeOpenTime,
       closeTime: storeCloseTime,
+      isFavorite: false,
+      totalBought: 0,
       location: storeLocation,
       color: storeColor,
       products: []

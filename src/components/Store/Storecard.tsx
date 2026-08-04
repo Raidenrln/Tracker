@@ -45,7 +45,7 @@ const Storecard = ({ store, onViewDetail, onViewProducts }: StorecardProps) => {
           </div>
 
           <div className="flex flex-col">
-            <span>Total Products: {store.productQuantity || 0}</span>
+            <span>Total Products: {store.products.length || 0}</span>
             <span>Total Boughts: ₱{store.totalBought || 0}</span>
           </div>
 
