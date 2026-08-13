@@ -1,7 +1,41 @@
-import React from "react";
+import React, { useState, type FormEvent } from "react";
+import axios from "axios";
 import { Mail, Lock } from "lucide-react";
 
 const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e: FormEvent) => {
+    // 1. MUST invoke the function e.preventDefault()
+    e.preventDefault();
+    setErrorMessage("");
+    setLoading(true);
+
+    try {
+      // 2. Pass username and password in the request body
+      const response = await axios.post("http://192.168.0.101:3000/api/login", {
+        username,
+        password,
+      });
+
+      console.log("Login successful:", response.data);
+      alert(response.data.message); // or handle navigation/session here
+
+    } catch (error: any) {
+      // 3. Extract the error message returned from Express server
+      if (axios.isAxiosError(error) && error.response) {
+        setErrorMessage(error.response.data.message || "Login failed");
+      } else {
+        setErrorMessage("Unable to connect to server.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-100 p-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
@@ -12,19 +46,29 @@ const Login = () => {
           </p>
         </div>
 
-        <form className="space-y-5">
+        {/* Display Error Alert if Login Fails */}
+        {errorMessage && (
+          <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600 border border-red-200">
+            {errorMessage}
+          </div>
+        )}
+
+        <form onSubmit={handleLogin} className="space-y-5">
           <div>
             <label className="mb-2 block text-sm font-medium text-slate-700">
-              Email
+              Username
             </label>
 
             <div className="flex items-center rounded-lg border border-slate-300 px-3 focus-within:border-blue-500">
               <Mail size={18} className="text-slate-400" />
 
               <input
-                type="email"
-                placeholder="Enter your email"
+                type="text"
+                placeholder="Enter your username"
                 className="w-full p-3 outline-none"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -41,13 +85,16 @@ const Login = () => {
                 type="password"
                 placeholder="Enter your password"
                 className="w-full p-3 outline-none"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </div>
           </div>
 
           <div className="flex items-center justify-between text-sm">
-            <label className="flex items-center gap-2">
-              <input type="checkbox" />
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" className="rounded" />
               Remember me
             </label>
 
@@ -61,9 +108,10 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full rounded-lg bg-blue-600 py-3 font-medium text-white transition hover:bg-blue-700"
+            disabled={loading}
+            className="w-full rounded-lg bg-blue-600 py-3 font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
           >
-            Sign In
+            {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
