@@ -1,0 +1,17 @@
+import mysql from "mysql2/promise"
+import "dotenv/config"
+
+const { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT } = process.env
+
+if(!DB_HOST || !DB_USER || !DB_PASSWORD || !DB_NAME) {
+   throw new Error("Missing required database environment variables");
+  }
+
+export const db = mysql.createPool({
+  host: DB_HOST,
+  user: DB_USER,
+  database: DB_NAME,
+  password: DB_PASSWORD ?? "",
+  port: Number(DB_PORT ?? 3306)
+});
+
